@@ -14,11 +14,11 @@ public class LanguageModel {
         return null;
     }
 
-    public int similarity(String[] input) {
+    public int similarity(String[] input, Location location) {
         return 0;
     }
 
-    public int occurences() {
+    public int occurences(String[] input, Location location) {
         return 0;
     }
 
