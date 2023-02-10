@@ -1,10 +1,12 @@
+import java.io.File;
+
 public class Location {
     int index;
-    String directory;
+    File file;
 
-    public Location(int idx, String directory) {
+    public Location(int idx, File file) {
         this.index = idx;
-        this.directory = directory;
+        this.file = file;
     }
 
     public Location previous() {
