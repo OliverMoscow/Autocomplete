@@ -1,3 +1,4 @@
+import java.io.IOException;
 import java.sql.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -5,8 +6,8 @@ import java.util.HashMap;
 public class LanguageModel {
     HashMap<String, ArrayList<Location>> data;
 
-    public LanguageModel() {
-        FileReader reader = new FileReader();
+    public LanguageModel() throws IOException {
+        Reader reader = new Reader();
         data = reader.mapAll();
     }
 
