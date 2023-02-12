@@ -12,19 +12,27 @@ public class Reader {
     ArrayList<File> files = new ArrayList<>();
 
     public Reader() throws IOException {
-        for (File f : allFiles("/data")) {
-            // System.out.println(f.getName());
-            files.addAll(allFiles("/data/" + f.getName()));
-        };
-        System.out.println(files.size());
+        System.out.println("getting files...");
+        // for (File f : allFiles("/data")) {
+        //     // System.out.println(f.getName());
+        //     files.addAll(allFiles("/data/" + f.getName()));
+        // };
+        files.addAll(allFiles("/data/fic"));
+        System.out.println("loaded " +files.size() + " files!");
     }
 
     public HashMap<String, ArrayList<Location>> mapAll() throws IOException  {
         HashMap<String, ArrayList<Location>> map = new HashMap<>();
         for(File f : files) {
             ArrayList<String> list = listWords(f);
-            for(String word : list) {
-                
+            for(int i = 0; i < list.size(); i++) {
+                Location l = new Location(i, f);
+                ArrayList<Location> prev = new ArrayList<>();
+                if(map.get(list.get(i)) != null) {
+                    prev = map.get(list.get(i));
+                }
+                prev.add(l);
+                map.put(list.get(i), prev);
             }
         }
         return map;
@@ -40,7 +48,7 @@ public class Reader {
         }
         return new ArrayList<>();
     }
-    private ArrayList<String> listWords(File file) throws IOException {
+    public static ArrayList<String> listWords(File file) throws IOException {
 
         BufferedReader br = new BufferedReader(new FileReader(file));
 
@@ -52,18 +60,24 @@ public class Reader {
         while ((str = br.readLine()) != null) {
             content += str;
         }
+        return Reader.splitByWord(content);
+    }
 
+    public static ArrayList<String> splitByWord(String input) {
+        String content = input;
         // https://stackoverflow.com/questions/7380626/how-to-replace-dot-in-a-string-in-java
-        content = content.replaceAll("\\.\'\\”", "");
+        // content = content.replaceAll("\\.\'\\”", "");
         // https://www.w3schools.com/java/ref_string_tolowercase.asp
         content = content.toLowerCase();
         // https://javarevisited.blogspot.com/2016/10/how-to-split-string-in-java-by-whitespace-or-tabs.html#axzz7sl65SBat
         String[] formated = content.split(" ");
 
-        return  new ArrayList<>(Arrays.asList(formated));
+        return new ArrayList<>(Arrays.asList(formated));
     }
+
 
     public static void main(String[] args) throws IOException {
         Reader reader = new Reader();
+        reader.mapAll();
     }
 }
