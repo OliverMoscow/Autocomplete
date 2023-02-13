@@ -11,17 +11,20 @@ public class Gui {
 
     public Gui() {
         JFrame frame = new JFrame();
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setVisible(true);
         JButton button = new JButton("Generate");
         JPanel panel = new JPanel();
+        String data [] = {"acad", "blog", "fic", "mag", "news", "spok", "tvm", "web"};
+        JComboBox dropDown = new JComboBox<>(data);
+        JTextArea text = new JTextArea();
+        frame.add(panel);
+        panel.add(dropDown);
+        panel.add(button);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setVisible(true);
         button.setLayout(null);
         button.setSize(20, 20);
         button.setForeground(Color.CYAN);
         button.setBackground(Color.RED);
-        frame.add(panel);
-        panel.add(button);
-        JTextArea text = new JTextArea();
         text.setForeground(Color.black);
         text.setBackground(Color.PINK);
         text.setColumns(20);
@@ -34,6 +37,15 @@ public class Gui {
         JScrollPane scroll = new JScrollPane(text);
         panel.add(scroll);
         panel.setBackground(Color.YELLOW);
+        String file = "acad";
+        dropDown.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+              // file = (String)dropDown.getSelectedItem();
+            }
+        });
+
+
         button.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -41,41 +53,31 @@ public class Gui {
                 String t = text.getText();
                 String newText = t;
                 ArrayList<String> words = new ArrayList<>();
-                while ((newText.indexOf(".") != -1) || (newText.indexOf("?") != -1) || (newText.indexOf("!") != -1)) {
-                    if (newText.indexOf(".") != -1) {
-                        newText = newText.substring(newText.indexOf(".") + 1);
-                    }
-                    if (newText.indexOf("?") != -1) {
-                        newText = newText.substring(newText.indexOf("?") + 1);
-                    }
-                    if (newText.indexOf("!") != -1) {
-                        newText = newText.substring(newText.indexOf("!") + 1);
-                    }
-                }
+
                 // /*
                     while (newText.length() != 0) {
                             if (newText.indexOf(" ") != -1) {
-                                if (newText.substring(0, newText.indexOf(" ")).indexOf(",") != -1
-                                        || newText.substring(0, newText.indexOf(" ")).indexOf(";") != -1
-                                        || newText.substring(0, newText.indexOf(" ")).indexOf(":") != -1
+                                if (newText.substring(0, newText.indexOf(" ")).indexOf(";") != -1
                                         || newText.substring(0, newText.indexOf(" ")).indexOf(":") != -1) {
                                     words.add(newText.substring(0, (newText.indexOf(" ") - 1)));
                                 } else {
-                                    words.add(newText.substring (0, newText.indexOf(" ")));
+                                    words.add(newText.substring(0, newText.indexOf(" ")));
                                 }
                                 newText = newText.substring(newText.indexOf(" ") + 1);
                             }
                         else {
                             if (newText.indexOf(".") != -1 
-                                    || newText.indexOf(",") != -1 
-                                    || newText.indexOf(";") != -1
-                                    || newText.indexOf(":") != -1){
+                                    || newText.indexOf("!") != -1 
+                                    || newText.indexOf("?") != -1){
                                 words.add(newText.substring(0, newText.length() - 1));
+                                words.add(newText.substring(newText.length() - 1));
+                                newText = "";
                                // words.add("passed");
                                     }
-                            else
+                            else{
                                 words.add(newText);
-                            newText = "";
+                                newText = "";
+                            }
                         }
                     }
                 // */
