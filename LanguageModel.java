@@ -3,6 +3,7 @@ import java.io.File;
 import java.io.IOException;
 import java.sql.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 
 public class LanguageModel {
@@ -84,13 +85,18 @@ public class LanguageModel {
 
         while (shouldContinue(words)) {
             words.add(generateWord(words.get(words.size() - 1)));
-            System.out.println(words.toString());
+            // System.out.println(words.toString());
         }
-        return words.toString();
+
+        if (words.size() < 100) {
+            words.add(".");
+        }
+
+        return String.join(" ", words);
     }
 
     private boolean shouldContinue(ArrayList<String> words) throws IOException {
-        if(words.size() > 20) {
+        if(words.size() > 100) {
             return false;
         }
         String word = generateWord(words.get(words.size() - 1));
@@ -147,12 +153,12 @@ public class LanguageModel {
         if (occurences == 0) {
             return 0;
         }
-        return Math.random() + (similarity + (1 + 1 / occurences));
+        return (Math.random() / 2) + (similarity + (1 + 1 / occurences));
     }
 
     public static void main(String[] args) throws IOException {
         LanguageModel model = new LanguageModel();
-        String res = model.generateResponse("how many people");
+        String res = model.generateResponse("what a");
         System.out.println(res);
     }
 
