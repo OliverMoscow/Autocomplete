@@ -13,41 +13,27 @@ public class Reader {
 
     public Reader() throws IOException {
         System.out.println("getting files...");
-        // for (File f : allFiles("/data")) {
-        //     // System.out.println(f.getName());
-        //     files.addAll(allFiles("/data/" + f.getName()));
-        // };
-        files.addAll(allFiles("/data/fic"));
-        System.out.println("loaded " +files.size() + " files!");
+        for (File f : allFiles("/data")) {
+            // System.out.println(f.getName());
+            files.addAll(allFiles("/data/" + f.getName()));
+        }
+        ;
+        // files.addAll(allFiles("/data/fic"));
+        System.out.println("loaded " + files.size() + " files!");
     }
 
-    public HashMap<String, ArrayList<Location>> mapAll() throws IOException  {
-        HashMap<String, ArrayList<Location>> map = new HashMap<>();
-        for(File f : files) {
-            ArrayList<String> list = listWords(f);
-            for(int i = 0; i < list.size(); i++) {
-                Location l = new Location(i, f);
-                ArrayList<Location> prev = new ArrayList<>();
-                if(map.get(list.get(i)) != null) {
-                    prev = map.get(list.get(i));
-                }
-                prev.add(l);
-                map.put(list.get(i), prev);
-            }
-        }
-        return map;
-    }
     public ArrayList<File> allFiles(String dir) {
         String filePath = new File("").getAbsolutePath();
         filePath += dir;
         // System.out.println(filePath);
         File folder = new File(filePath);
         File[] listOfFiles = folder.listFiles();
-        if(listOfFiles != null) {
+        if (listOfFiles != null) {
             return new ArrayList<>(Arrays.asList(listOfFiles));
         }
         return new ArrayList<>();
     }
+
     public static ArrayList<String> listWords(File file) throws IOException {
 
         BufferedReader br = new BufferedReader(new FileReader(file));
@@ -64,41 +50,16 @@ public class Reader {
     }
 
     public static ArrayList<String> splitByWord(String input) {
-        ArrayList<String> words = new ArrayList<>();
-        String newText = input;
-        // /*
-        while (newText.length() != 0) {
-            if (newText.indexOf(" ") != -1) {
-                if (newText.substring(0, newText.indexOf(" ")).indexOf(";") != -1
-                        || newText.substring(0, newText.indexOf(" ")).indexOf(":") != -1) {
-                    words.add(newText.substring(0, (newText.indexOf(" ") - 1)));
-                } else {
-                    words.add(newText.substring(0, newText.indexOf(" ")));
-                }
-                newText = newText.substring(newText.indexOf(" ") + 1);
-            }
-        else {
-            if (newText.indexOf(".") != -1 
-                    || newText.indexOf("!") != -1 
-                    || newText.indexOf("?") != -1){
-                words.add(newText.substring(0, newText.length() - 1));
-                words.add(newText.substring(newText.length() - 1));
-                newText = "";
-               // words.add("passed");
-                    }
-            else{
-                words.add(newText);
-                newText = "";
-            }
-        }
-    }
+        String s = input;
+        // https://stackoverflow.com/questions/7380626/how-to-replace-dot-in-a-string-in-java
+        // https://www.w3schools.com/java/ref_string_tolowercase.asp
+        s = s.toLowerCase();
+        // https://javarevisited.blogspot.com/2016/10/how-to-split-string-in-java-by-whitespace-or-tabs.html#axzz7sl65SBat
+        //Algorith to format text. I used Chat GPT to help with the regex.
+        String[] formated = s.split("[^\\w']+");
+
+        // System.out.println(Arrays.toString(formated));
 
         return words;
-    }
-
-
-    public static void main(String[] args) throws IOException {
-        Reader reader = new Reader();
-        reader.mapAll();
     }
 }
