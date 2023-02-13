@@ -13,29 +13,12 @@ public class Reader {
 
     public Reader() throws IOException {
         System.out.println("getting files...");
-        // for (File f : allFiles("/data")) {
-        //     // System.out.println(f.getName());
-        //     files.addAll(allFiles("/data/" + f.getName()));
-        // };
-        files.addAll(allFiles("/data/fic"));
+        for (File f : allFiles("/data")) {
+            // System.out.println(f.getName());
+            files.addAll(allFiles("/data/" + f.getName()));
+        };
+        // files.addAll(allFiles("/data/fic"));
         System.out.println("loaded " +files.size() + " files!");
-    }
-
-    public HashMap<String, ArrayList<Location>> mapAll() throws IOException  {
-        HashMap<String, ArrayList<Location>> map = new HashMap<>();
-        for(File f : files) {
-            ArrayList<String> list = listWords(f);
-            for(int i = 0; i < list.size(); i++) {
-                Location l = new Location(i, f);
-                ArrayList<Location> prev = new ArrayList<>();
-                if(map.get(list.get(i)) != null) {
-                    prev = map.get(list.get(i));
-                }
-                prev.add(l);
-                map.put(list.get(i), prev);
-            }
-        }
-        return map;
     }
     public ArrayList<File> allFiles(String dir) {
         String filePath = new File("").getAbsolutePath();
@@ -73,11 +56,5 @@ public class Reader {
         String[] formated = content.split(" ");
 
         return new ArrayList<>(Arrays.asList(formated));
-    }
-
-
-    public static void main(String[] args) throws IOException {
-        Reader reader = new Reader();
-        reader.mapAll();
     }
 }
