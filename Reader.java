@@ -60,6 +60,6 @@ public class Reader {
 
         // System.out.println(Arrays.toString(formated));
 
-        return words;
+        return new ArrayList<>(Arrays.asList(formated));
     }
 }
