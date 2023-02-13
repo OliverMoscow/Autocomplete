@@ -13,7 +13,7 @@ import javax.swing.*;
 public class Gui {
 
     public Gui() throws IOException {
-        JFrame frame = new JFrame();
+        JFrame frame = new JFrame("Chat with Chad");
         JButton button = new JButton("Generate");
         JPanel panel = new JPanel();
         JTextArea text = new JTextArea();
