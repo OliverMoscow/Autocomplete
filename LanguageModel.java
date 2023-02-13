@@ -1,15 +1,20 @@
 import java.io.Console;
 import java.io.File;
 import java.io.IOException;
-import java.sql.Array;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
+
+import javax.annotation.processing.Completion;
 
 public class LanguageModel {
     HashMap<String, HashMap<String, Score>> data;
+    ArrayList<String> input;
+    
 
-    public LanguageModel() throws IOException {
+    public LanguageModel(String input) throws IOException {
+        Reader reader = new Reader();
+        this.input = Reader.splitByWord(input);
+        mapAll(reader.files, this.input);
     }
 
     private void mapAll(ArrayList<File> files, ArrayList<String> input) throws IOException  {
@@ -76,34 +81,24 @@ public class LanguageModel {
         return x.equals(y);
     }
 
-    public String generateResponse(String input) throws IOException {
-        Reader reader = new Reader();
-        ArrayList<String> words = Reader.splitByWord(input);
-        mapAll(reader.files, words);
-
+    public String generateResponse() throws IOException {
         System.out.println("Generating...");
+        boolean shouldContinue = true;
+        while (shouldContinue) {
+            String word = generateWord(input.get(input.size() - 1));
 
-        while (shouldContinue(words)) {
-            words.add(generateWord(words.get(words.size() - 1)));
-            // System.out.println(words.toString());
+            if (word == null) {
+                shouldContinue = false;
+                break;
+            }
+            if (word.equals(".") || word.equals("?") || word.equals("!")) {
+                shouldContinue = false;
+            }
+            input.add(generateWord(input.get(input.size() - 1)));
+
         }
 
-        if (words.size() < 100) {
-            words.add(".");
-        }
-
-        return String.join(" ", words);
-    }
-
-    private boolean shouldContinue(ArrayList<String> words) throws IOException {
-        if(words.size() > 100) {
-            return false;
-        }
-        String word = generateWord(words.get(words.size() - 1));
-        if (word.equals(".")) {
-            return false;
-        }
-        return word != null;
+        return String.join(" ", input);
     }
 
     private String generateWord(String input) throws IOException {
@@ -118,6 +113,7 @@ public class LanguageModel {
                 }
             }
         }
+
         return best;
 
 
@@ -157,9 +153,10 @@ public class LanguageModel {
     }
 
     public static void main(String[] args) throws IOException {
-        LanguageModel model = new LanguageModel();
-        String res = model.generateResponse("what a");
+        LanguageModel model = new LanguageModel("summer time");
+        String res = model.generateResponse();
         System.out.println(res);
+        // System.out.println(Reader.splitByWord("test the tester, loves thesting."));
     }
 
     // private int similarity(ArrayList<String> input, Location location) throws IOException {

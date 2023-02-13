@@ -6,6 +6,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.regex.Pattern;
+import java.util.regex.Matcher;
 
 public class Reader {
 
@@ -55,11 +57,20 @@ public class Reader {
         // https://www.w3schools.com/java/ref_string_tolowercase.asp
         s = s.toLowerCase();
         // https://javarevisited.blogspot.com/2016/10/how-to-split-string-in-java-by-whitespace-or-tabs.html#axzz7sl65SBat
-        //Algorith to format text. I used Chat GPT to help with the regex.
-        String[] formated = s.split("[^\\w']+");
+        // Algorith to format text. I used Chat GPT to help with the regex.
+        ArrayList<String> words = new ArrayList<>();
 
-        // System.out.println(Arrays.toString(formated));
+        // Regular expression to match word characters and punctuation
+        Pattern pattern = Pattern.compile("\\w+|[^\\w\\s]");
+        Matcher matcher = pattern.matcher(s);
 
-        return new ArrayList<>(Arrays.asList(formated));
+        // Loop through the text and add each word and punctuation to the array
+        while (matcher.find()) {
+            words.add(matcher.group());
+        }
+
+        // String[] formated = s.split("[^\\w']+");
+
+        return words;
     }
 }
